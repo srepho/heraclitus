@@ -8,6 +8,11 @@ from heraclitus.metrics import (
     calculate_waiting_time,
     calculate_processing_time,
 )
+from heraclitus.statistics import (
+    compare_cycle_times,
+    bottleneck_analysis,
+    fit_distribution,
+)
 
 # Re-export key classes and functions
 __all__ = [
@@ -17,4 +22,7 @@ __all__ = [
     "calculate_cycle_time",
     "calculate_waiting_time",
     "calculate_processing_time",
+    "compare_cycle_times",
+    "bottleneck_analysis",
+    "fit_distribution",
 ]
