@@ -1,13 +1,15 @@
 """
 Time-based metrics for process analysis.
 """
-from typing import Optional, List, Dict, Union, Literal
+from typing import Optional, List, Dict, Union, Literal, Tuple
 import pandas as pd
 import numpy as np
+from functools import lru_cache
 
 from heraclitus.data import EventLog
 
 
+@lru_cache(maxsize=32)
 def calculate_cycle_time(
     event_log: EventLog,
     case_id: Optional[str] = None,
@@ -53,41 +55,55 @@ def calculate_cycle_time(
     }
     factor = time_factors[unit]
     
-    # Calculate cycle times for each case
-    cycle_times = []
+    # Vectorized calculation
+    # Group the dataframe by case_id
+    case_id_col = event_log.case_id_column
+    ts_col = event_log.timestamp_column
+    act_col = event_log.activity_column
     
-    for case_id, case_df in df.groupby(event_log.case_id_column):
-        # Sort by timestamp
-        case_df = case_df.sort_values(by=event_log.timestamp_column)
-        
-        if start_activity is not None:
-            # Find first occurrence of start_activity
-            start_events = case_df[case_df[event_log.activity_column] == start_activity]
-            if len(start_events) == 0:
-                # Skip this case if start_activity not found
-                continue
-            start_time = start_events.iloc[0][event_log.timestamp_column]
-        else:
-            # Use first event as start
-            start_time = case_df.iloc[0][event_log.timestamp_column]
-        
-        if end_activity is not None:
-            # Find last occurrence of end_activity
-            end_events = case_df[case_df[event_log.activity_column] == end_activity]
-            if len(end_events) == 0:
-                # Skip this case if end_activity not found
-                continue
-            end_time = end_events.iloc[-1][event_log.timestamp_column]
-        else:
-            # Use last event as end
-            end_time = case_df.iloc[-1][event_log.timestamp_column]
-        
-        # Calculate duration in seconds and convert to the desired unit
-        duration = (end_time - start_time).total_seconds() / factor
-        cycle_times.append(duration)
+    # Sort the dataframe in one go
+    df = df.sort_values([case_id_col, ts_col])
     
-    if not cycle_times:
+    # Get the first and last event for each case
+    if start_activity is None and end_activity is None:
+        # Simple case: first and last event of each case
+        case_first_last = df.groupby(case_id_col)[ts_col].agg(['first', 'last']).reset_index()
+        cycle_times = (case_first_last['last'] - case_first_last['first']).dt.total_seconds() / factor
+        
+    else:
+        # We need custom start/end points
+        cycle_times = []
+        
+        # This part is harder to vectorize due to custom activities
+        for case_id, case_df in df.groupby(case_id_col):
+            # Find start time
+            if start_activity is not None:
+                start_events = case_df[case_df[act_col] == start_activity]
+                if len(start_events) == 0:
+                    continue
+                start_time = start_events.iloc[0][ts_col]
+            else:
+                start_time = case_df.iloc[0][ts_col]
+            
+            # Find end time
+            if end_activity is not None:
+                end_events = case_df[case_df[act_col] == end_activity]
+                if len(end_events) == 0:
+                    continue
+                end_time = end_events.iloc[-1][ts_col]
+            else:
+                end_time = case_df.iloc[-1][ts_col]
+            
+            # Calculate duration
+            duration = (end_time - start_time).total_seconds() / factor
+            cycle_times.append(duration)
+    
+    if len(cycle_times) == 0:
         raise ValueError("No valid cases found matching the criteria")
+    
+    # Convert to numpy array if it's not already
+    if isinstance(cycle_times, pd.Series):
+        cycle_times = cycle_times.to_numpy()
     
     if include_stats:
         return {
@@ -102,6 +118,7 @@ def calculate_cycle_time(
     return np.mean(cycle_times)
 
 
+@lru_cache(maxsize=32)
 def calculate_waiting_time(
     event_log: EventLog,
     activity: str,
@@ -149,47 +166,54 @@ def calculate_waiting_time(
     }
     factor = time_factors[unit]
     
-    # Calculate waiting times
+    # Vectorized implementation
+    case_id_col = event_log.case_id_column
+    ts_col = event_log.timestamp_column
+    act_col = event_log.activity_column
+    
+    # Sort all events by case ID and timestamp
+    df = df.sort_values([case_id_col, ts_col])
+    
+    # Process each case
     waiting_times = []
     
-    for case_id, case_df in df.groupby(event_log.case_id_column):
-        # Sort by timestamp
-        case_df = case_df.sort_values(by=event_log.timestamp_column)
+    # This is challenging to fully vectorize due to the need to find preceding events
+    # for each activity occurrence - we'll use a grouped approach with shift()
+    for case_id, case_df in df.groupby(case_id_col):
+        # Mark the target activities
+        case_df['is_target'] = case_df[act_col] == activity
         
-        # Find occurrences of the activity
-        activity_events = case_df[case_df[event_log.activity_column] == activity]
+        # Create a column with the previous timestamp
+        case_df['prev_timestamp'] = case_df[ts_col].shift(1)
         
-        for idx, activity_event in activity_events.iterrows():
-            activity_time = activity_event[event_log.timestamp_column]
-            
-            # Find the event immediately preceding this activity
-            preceding_events = case_df[case_df[event_log.timestamp_column] < activity_time]
-            
-            if not preceding_events.empty:
-                # Get the most recent preceding event
-                preceding_event = preceding_events.iloc[-1]
-                preceding_time = preceding_event[event_log.timestamp_column]
-                
-                # Calculate waiting time
-                waiting_time = (activity_time - preceding_time).total_seconds() / factor
-                waiting_times.append(waiting_time)
+        # Filter to only target activities that have a preceding event
+        filtered = case_df[case_df['is_target'] & case_df['prev_timestamp'].notna()]
+        
+        if not filtered.empty:
+            # Calculate all waiting times at once
+            times = (filtered[ts_col] - filtered['prev_timestamp']).dt.total_seconds() / factor
+            waiting_times.extend(times.tolist())
     
     if not waiting_times:
         raise ValueError(f"No waiting times could be calculated for activity '{activity}'")
     
+    # Convert to numpy array
+    waiting_times_array = np.array(waiting_times)
+    
     if include_stats:
         return {
-            "mean": np.mean(waiting_times),
-            "median": np.median(waiting_times),
-            "min": np.min(waiting_times),
-            "max": np.max(waiting_times),
-            "std": np.std(waiting_times),
-            "count": len(waiting_times)
+            "mean": np.mean(waiting_times_array),
+            "median": np.median(waiting_times_array),
+            "min": np.min(waiting_times_array),
+            "max": np.max(waiting_times_array),
+            "std": np.std(waiting_times_array),
+            "count": len(waiting_times_array)
         }
     
-    return np.mean(waiting_times)
+    return np.mean(waiting_times_array)
 
 
+@lru_cache(maxsize=32)
 def calculate_processing_time(
     event_log: EventLog,
     activity: str,
@@ -239,46 +263,59 @@ def calculate_processing_time(
     }
     factor = time_factors[unit]
     
-    # Calculate processing times
+    # Vectorized implementation
+    case_id_col = event_log.case_id_column
+    ts_col = event_log.timestamp_column
+    act_col = event_log.activity_column
+    
+    # Sort all events by case ID and timestamp
+    df = df.sort_values([case_id_col, ts_col])
+    
+    # Process each case with vectorized operations
     processing_times = []
     
-    for case_id, case_df in df.groupby(event_log.case_id_column):
-        # Sort by timestamp
-        case_df = case_df.sort_values(by=event_log.timestamp_column)
+    # Similar approach to waiting time but looking at next events instead of previous
+    for case_id, case_df in df.groupby(case_id_col):
+        # Mark the target activities
+        case_df['is_target'] = case_df[act_col] == activity
         
-        # Find occurrences of the activity
-        activity_events = case_df[case_df[event_log.activity_column] == activity]
+        # Create a column with the next timestamp using shift(-1)
+        case_df['next_timestamp'] = case_df[ts_col].shift(-1)
         
-        for idx, activity_event in activity_events.iterrows():
-            activity_time = activity_event[event_log.timestamp_column]
+        # Filter to only target activities
+        target_activities = case_df[case_df['is_target']]
+        
+        if not target_activities.empty:
+            # For each target activity:
+            # - If it has a next event (not the last in case), include it
+            # - If it's the last in case and skip_last_events=False, don't include it
+            if skip_last_events:
+                # Only include activities with a valid next timestamp
+                filtered = target_activities[target_activities['next_timestamp'].notna()]
+            else:
+                # Include all target activities with next timestamps
+                filtered = target_activities[target_activities['next_timestamp'].notna()]
+                # Could add custom handling for the last events here if needed
             
-            # Find the event immediately following this activity
-            following_events = case_df[case_df[event_log.timestamp_column] > activity_time]
-            
-            if not following_events.empty:
-                # Get the next event
-                following_event = following_events.iloc[0]
-                following_time = following_event[event_log.timestamp_column]
-                
-                # Calculate processing time
-                processing_time = (following_time - activity_time).total_seconds() / factor
-                processing_times.append(processing_time)
-            elif not skip_last_events:
-                # This is the last event in the case and we're not skipping last events
-                # We could use current time, but for now we'll skip these
-                pass
+            if not filtered.empty:
+                # Calculate all processing times at once
+                times = (filtered['next_timestamp'] - filtered[ts_col]).dt.total_seconds() / factor
+                processing_times.extend(times.tolist())
     
     if not processing_times:
         raise ValueError(f"No processing times could be calculated for activity '{activity}'")
     
+    # Convert to numpy array
+    processing_times_array = np.array(processing_times)
+    
     if include_stats:
         return {
-            "mean": np.mean(processing_times),
-            "median": np.median(processing_times),
-            "min": np.min(processing_times),
-            "max": np.max(processing_times),
-            "std": np.std(processing_times),
-            "count": len(processing_times)
+            "mean": np.mean(processing_times_array),
+            "median": np.median(processing_times_array),
+            "min": np.min(processing_times_array),
+            "max": np.max(processing_times_array),
+            "std": np.std(processing_times_array),
+            "count": len(processing_times_array)
         }
     
-    return np.mean(processing_times)
+    return np.mean(processing_times_array)

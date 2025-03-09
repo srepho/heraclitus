@@ -2,7 +2,7 @@
 
 This document outlines the planned features and improvements for future releases of the Heraclitus project.
 
-## Current Version (0.1.0)
+## Current Version (0.2.0)
 
 - ✅ Core EventLog class with filtering capabilities
 - ✅ Basic visualizations (process map, activity frequency)
@@ -28,9 +28,9 @@ This document outlines the planned features and improvements for future releases
   - ✅ Query-to-EventLog conversion
   - ✅ Efficient filtering and aggregation
 
-- [ ] **Performance Optimization**
-  - [ ] Vectorized operations for metrics
-  - [ ] Caching for repeated calculations
+- ✅ **Performance Optimization**
+  - ✅ Vectorized operations for metrics
+  - ✅ Caching for repeated calculations
   - ✅ DuckDB integration for large datasets
 
 ## Medium-term Goals (0.3.0)
@@ -46,10 +46,10 @@ This document outlines the planned features and improvements for future releases
   - ✅ Outlier detection algorithms
   - ✅ Anomaly visualization
 
-- [ ] **PM4PY Integration**
-  - [ ] Convert between Heraclitus and PM4PY formats
-  - [ ] Use PM4PY algorithms with Heraclitus EventLogs
-  - [ ] Extend PM4PY visualizations
+- ✅ **PM4PY Integration**
+  - ✅ Convert between Heraclitus and PM4PY formats
+  - ✅ Use PM4PY algorithms with Heraclitus EventLogs
+  - ✅ Extend PM4PY visualizations
 
 - [ ] **Documentation**
   - [x] Basic API documentation
@@ -59,10 +59,10 @@ This document outlines the planned features and improvements for future releases
 
 ## Long-term Vision
 
-- [ ] **Advanced Process Discovery**
-  - [ ] Custom process discovery algorithms
-  - [ ] Conformance checking
-  - [ ] BPMN export
+- ✅ **Advanced Process Discovery**
+  - ✅ Custom process discovery algorithms
+  - ✅ Conformance checking
+  - ✅ BPMN export
 
 - [ ] **Web Interface**
   - [ ] Interactive dashboard for process analysis
@@ -80,16 +80,16 @@ This document outlines the planned features and improvements for future releases
    - Complete the documentation site
    - Create comprehensive tutorials
    - Develop Jupyter notebooks showcasing all features
+   
+2. **Web Interface**
+   - Develop a web-based dashboard for process analysis
+   - Create shareable HTML reports
+   - Implement real-time monitoring capabilities
 
-2. **PM4PY Integration**
-   - Create converters between Heraclitus and PM4PY
-   - Enable use of advanced PM4PY algorithms
-   - Integrate PM4PY visualization capabilities
-
-3. **Advanced Process Discovery**
-   - Implement process discovery algorithms
-   - Create conformance checking tools
-   - Add BPMN export functionality
+3. **Integration with Other Tools**
+   - Add XES format import/export
+   - Integrate with more process mining standards
+   - Create APIs for third-party extensions
 
 ## Contributing
 

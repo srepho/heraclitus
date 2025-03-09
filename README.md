@@ -4,6 +4,13 @@
   <img src="heraclitus_logo.webp" alt="Heraclitus Logo" width="250">
 </p>
 
+<p align="center">
+  <a href="https://pypi.org/project/heraclitus/"><img alt="PyPI Version" src="https://img.shields.io/pypi/v/heraclitus.svg"></a>
+  <a href="https://pypi.org/project/heraclitus/"><img alt="Python Versions" src="https://img.shields.io/pypi/pyversions/heraclitus.svg"></a>
+  <a href="https://github.com/yourusername/heraclitus/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/yourusername/heraclitus.svg"></a>
+  <a href="https://github.com/yourusername/heraclitus/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/yourusername/heraclitus.svg"></a>
+</p>
+
 A Python library aimed at making Process Mining accessible to new users. Works well with PM4PY but adds additional features for analysis and visualization.
 
 ## Features
@@ -21,27 +28,47 @@ A Python library aimed at making Process Mining accessible to new users. Works w
   - DuckDB integration for handling datasets larger than memory
   - Efficient querying and filtering of large process logs
 - **Machine Learning**:
-  - **NEW**: Predictive models for process outcomes
-  - **NEW**: Duration prediction with regression and classification
-  - **NEW**: Feature engineering tools for process data
+  - Predictive models for process outcomes
+  - Duration prediction with regression and classification
+  - Feature engineering tools for process data
 - **Anomaly Detection**:
-  - **NEW**: Identify unusual process behaviors
-  - **NEW**: Detect outlier cases and process variants
-  - **NEW**: Visualize anomalies for investigation
+  - Identify unusual process behaviors
+  - Detect outlier cases and process variants
+  - Visualize anomalies for investigation
+- **Process Discovery** (NEW in v0.2.0):
+  - Custom process discovery algorithms
+  - Conformance checking capabilities
+  - BPMN export functionality
+- **PM4PY Integration** (NEW in v0.2.0):
+  - Seamless conversion between Heraclitus and PM4PY formats
+  - Use PM4PY algorithms with Heraclitus EventLogs
+  - Enhanced visualizations for process models
+- **Performance Optimization** (NEW in v0.2.0):
+  - Vectorized operations for metrics
+  - Caching for repeated calculations
 
 ## Installation
 
 ```bash
-# Install from source
+# Install from PyPI
+pip install heraclitus
+
+# Install with PM4PY integration
+pip install heraclitus[pm4py]
+
+# Install with machine learning features
+pip install heraclitus[ml]
+
+# Install with all optional dependencies
+pip install heraclitus[pm4py,ml,dev]
+```
+
+Or install from source:
+
+```bash
 git clone https://github.com/yourusername/heraclitus.git
 cd heraclitus
 pip install -e .
-
-# Install dev dependencies
-pip install -e ".[dev]"
-
-# For machine learning features
-pip install -e ".[ml]"
 ```
 
 ## Quick Start
@@ -126,6 +153,7 @@ Check out the examples directory for detailed usage examples:
 - `interactive_visualization.py`: Interactive Plotly visualizations
 - `duckdb_large_datasets.py`: Working with large datasets
 - `machine_learning.py`: Predictive modeling and anomaly detection
+- `process_discovery.py`: Process discovery and conformance checking (NEW)
 
 ## Documentation
 
