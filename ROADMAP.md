@@ -51,11 +51,11 @@ This document outlines the planned features and improvements for future releases
   - ✅ Use PM4PY algorithms with Heraclitus EventLogs
   - ✅ Extend PM4PY visualizations
 
-- [ ] **Documentation**
-  - [x] Basic API documentation
-  - [x] Machine learning guide
-  - [ ] Comprehensive tutorials with real-world examples
-  - [ ] Complete Jupyter notebooks showcasing features
+- ✅ **Documentation**
+  - ✅ Basic API documentation
+  - ✅ Machine learning guide
+  - ✅ Comprehensive tutorials with real-world examples
+  - ✅ Jupyter notebooks showcasing features
 
 ## Long-term Vision
 
@@ -69,9 +69,9 @@ This document outlines the planned features and improvements for future releases
   - [ ] Shareable reports
   - [ ] Real-time monitoring
 
-- [ ] **Integration with Other Tools**
-  - [ ] XES format import/export
-  - [ ] Integration with process mining standards
+- ✅ **Integration with Other Tools**
+  - ✅ XES format import/export
+  - [ ] Integration with additional process mining standards
   - [ ] APIs for third-party extensions
 
 ## Next Major Focus Areas
