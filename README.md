@@ -11,15 +11,23 @@ A Python library aimed at making Process Mining accessible to new users. Works w
 - **EventLog Management**: Easy to use interface for loading, filtering, and manipulating process event data
 - **Process Visualization**: 
   - Static process maps and activity frequency charts
-  - **NEW**: Interactive visualizations with Plotly
-  - **NEW**: Timeline visualizations and bottleneck dashboards
+  - Interactive visualizations with Plotly
+  - Timeline visualizations and bottleneck dashboards
 - **Time Metrics**: Calculate cycle times, waiting times, and processing times
 - **Statistical Analysis**: 
   - Compare process variants and identify bottlenecks
   - Distribution fitting and hypothesis testing
 - **Large Dataset Support**:
-  - **NEW**: DuckDB integration for handling datasets larger than memory
+  - DuckDB integration for handling datasets larger than memory
   - Efficient querying and filtering of large process logs
+- **Machine Learning**:
+  - **NEW**: Predictive models for process outcomes
+  - **NEW**: Duration prediction with regression and classification
+  - **NEW**: Feature engineering tools for process data
+- **Anomaly Detection**:
+  - **NEW**: Identify unusual process behaviors
+  - **NEW**: Detect outlier cases and process variants
+  - **NEW**: Visualize anomalies for investigation
 
 ## Installation
 
@@ -32,7 +40,7 @@ pip install -e .
 # Install dev dependencies
 pip install -e ".[dev]"
 
-# For machine learning features (coming soon)
+# For machine learning features
 pip install -e ".[ml]"
 ```
 
@@ -79,6 +87,26 @@ filtered_log = db.query_to_eventlog("""
 print(f"Filtered log contains {filtered_log.case_count()} cases")
 ```
 
+### Machine Learning and Anomaly Detection
+
+```python
+from heraclitus.ml import OutcomePredictor, ProcessAnomalyDetector, FeatureExtractor
+
+# Extract features from event log
+feature_extractor = FeatureExtractor(event_log)
+features_df = feature_extractor.extract_case_features()
+
+# Train a prediction model
+predictor = OutcomePredictor()
+model_info = predictor.train(event_log, model_type="random_forest")
+predictions = predictor.predict(features_df)
+
+# Detect process anomalies
+anomaly_detector = ProcessAnomalyDetector()
+anomaly_detector.train(event_log, method="isolation_forest")
+anomalies = anomaly_detector.detect_anomalies(features_df)
+```
+
 ## Requirements
 
 - Python 3.10-3.12
@@ -88,6 +116,7 @@ print(f"Filtered log contains {filtered_log.case_count()} cases")
 - scipy
 - plotly
 - duckdb
+- scikit-learn (for ML features)
 
 ## Examples
 
@@ -96,6 +125,11 @@ Check out the examples directory for detailed usage examples:
 - `statistical_analysis.py`: Statistical comparisons and bottleneck analysis
 - `interactive_visualization.py`: Interactive Plotly visualizations
 - `duckdb_large_datasets.py`: Working with large datasets
+- `machine_learning.py`: Predictive modeling and anomaly detection
+
+## Documentation
+
+See the [Documentation](docs/index.md) for comprehensive guides and tutorials.
 
 ## Development
 

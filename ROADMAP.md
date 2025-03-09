@@ -31,20 +31,20 @@ This document outlines the planned features and improvements for future releases
 - [ ] **Performance Optimization**
   - [ ] Vectorized operations for metrics
   - [ ] Caching for repeated calculations
-  - [x] DuckDB integration for large datasets
+  - ✅ DuckDB integration for large datasets
 
 ## Medium-term Goals (0.3.0)
 
-- [ ] **Machine Learning Module**
-  - [ ] Outcome prediction
-  - [ ] Duration prediction
-  - [ ] Feature engineering utilities
-  - [ ] Model evaluation tools
+- ✅ **Machine Learning Module**
+  - ✅ Feature engineering utilities
+  - ✅ Outcome prediction
+  - ✅ Duration prediction
+  - ✅ Model evaluation tools
 
-- [ ] **Anomaly Detection**
-  - [ ] Process variant analysis
-  - [ ] Outlier detection algorithms
-  - [ ] Anomaly visualization
+- ✅ **Anomaly Detection**
+  - ✅ Process variant analysis
+  - ✅ Outlier detection algorithms
+  - ✅ Anomaly visualization
 
 - [ ] **PM4PY Integration**
   - [ ] Convert between Heraclitus and PM4PY formats
@@ -52,9 +52,10 @@ This document outlines the planned features and improvements for future releases
   - [ ] Extend PM4PY visualizations
 
 - [ ] **Documentation**
-  - [ ] Complete API documentation
-  - [ ] Tutorials with real-world examples
-  - [ ] Jupyter notebooks showcasing features
+  - [x] Basic API documentation
+  - [x] Machine learning guide
+  - [ ] Comprehensive tutorials with real-world examples
+  - [ ] Complete Jupyter notebooks showcasing features
 
 ## Long-term Vision
 
@@ -75,20 +76,20 @@ This document outlines the planned features and improvements for future releases
 
 ## Next Major Focus Areas
 
-1. **Machine Learning Module**
-   - Implement predictive analytics for process outcomes
-   - Duration prediction models
-   - Process variant classification
+1. **Documentation Improvement**
+   - Complete the documentation site
+   - Create comprehensive tutorials
+   - Develop Jupyter notebooks showcasing all features
 
-2. **Anomaly Detection**
-   - Identify unusual process behaviors
-   - Outlier case detection
-   - Visualize anomalies in the process
+2. **PM4PY Integration**
+   - Create converters between Heraclitus and PM4PY
+   - Enable use of advanced PM4PY algorithms
+   - Integrate PM4PY visualization capabilities
 
-3. **Comprehensive Documentation**
-   - API documentation with examples
-   - User guide for all modules
-   - Tutorials for common use cases
+3. **Advanced Process Discovery**
+   - Implement process discovery algorithms
+   - Create conformance checking tools
+   - Add BPMN export functionality
 
 ## Contributing
 

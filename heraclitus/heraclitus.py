@@ -20,6 +20,20 @@ from heraclitus.statistics import (
     bottleneck_analysis,
     fit_distribution,
 )
+from heraclitus.ml import (
+    # Feature Engineering
+    FeatureExtractor,
+    create_target_variable,
+    combine_features_and_target,
+    
+    # Prediction
+    OutcomePredictor,
+    DurationPredictor,
+    
+    # Anomaly Detection
+    ProcessAnomalyDetector,
+    detect_variant_anomalies,
+)
 
 # Re-export key classes and functions
 __all__ = [
@@ -45,4 +59,17 @@ __all__ = [
     "compare_cycle_times",
     "bottleneck_analysis",
     "fit_distribution",
+    
+    # Machine Learning - Feature Engineering
+    "FeatureExtractor",
+    "create_target_variable",
+    "combine_features_and_target",
+    
+    # Machine Learning - Prediction
+    "OutcomePredictor", 
+    "DurationPredictor",
+    
+    # Machine Learning - Anomaly Detection
+    "ProcessAnomalyDetector",
+    "detect_variant_anomalies",
 ]
