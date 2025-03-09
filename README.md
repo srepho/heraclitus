@@ -35,17 +35,24 @@ A Python library aimed at making Process Mining accessible to new users. Works w
   - Identify unusual process behaviors
   - Detect outlier cases and process variants
   - Visualize anomalies for investigation
-- **Process Discovery** (NEW in v0.2.0):
+- **Process Discovery**:
   - Custom process discovery algorithms
   - Conformance checking capabilities
   - BPMN export functionality
-- **PM4PY Integration** (NEW in v0.2.0):
+- **PM4PY Integration**:
   - Seamless conversion between Heraclitus and PM4PY formats
   - Use PM4PY algorithms with Heraclitus EventLogs
   - Enhanced visualizations for process models
-- **Performance Optimization** (NEW in v0.2.0):
+- **Performance Optimization**:
   - Vectorized operations for metrics
   - Caching for repeated calculations
+- **XES Format Support** (NEW in v0.3.0):
+  - IEEE 1849-2016 standard compliant XES import/export
+  - Extended EventLog class with XES methods
+  - Support for XES extensions and global attributes
+- **Improved Documentation** (NEW in v0.3.0):
+  - Comprehensive Jupyter notebook tutorials
+  - More detailed examples
 
 ## Installation
 
@@ -153,7 +160,8 @@ Check out the examples directory for detailed usage examples:
 - `interactive_visualization.py`: Interactive Plotly visualizations
 - `duckdb_large_datasets.py`: Working with large datasets
 - `machine_learning.py`: Predictive modeling and anomaly detection
-- `process_discovery.py`: Process discovery and conformance checking (NEW)
+- `process_discovery.py`: Process discovery and conformance checking
+- `xes_format.py`: XES format import and export (NEW)
 
 ## Documentation
 

@@ -2,7 +2,7 @@
 
 This document outlines the planned features and improvements for future releases of the Heraclitus project.
 
-## Current Version (0.2.0)
+## Current Version (0.3.0)
 
 - ✅ Core EventLog class with filtering capabilities
 - ✅ Basic visualizations (process map, activity frequency)
