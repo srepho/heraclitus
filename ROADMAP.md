@@ -11,27 +11,27 @@ This document outlines the planned features and improvements for future releases
 
 ## Short-term Goals (0.2.0)
 
-- [ ] **Statistics Module**
-  - [ ] Compare cycle times between groups
-  - [ ] Bottleneck analysis
-  - [ ] Distribution fitting
-  - [ ] Statistical tests and p-value calculations
+- ✅ **Statistics Module**
+  - ✅ Compare cycle times between groups
+  - ✅ Bottleneck analysis
+  - ✅ Distribution fitting
+  - ✅ Statistical tests and p-value calculations
 
-- [ ] **Enhanced Visualizations**
-  - [ ] Interactive process maps (using Plotly)
-  - [ ] Timeline visualizations
-  - [ ] Cases over time charts
-  - [ ] Duration histograms
+- ✅ **Enhanced Visualizations**
+  - ✅ Interactive process maps (using Plotly)
+  - ✅ Timeline visualizations
+  - ✅ Cases over time charts
+  - ✅ Bottleneck dashboard
 
-- [ ] **Database Support**
-  - [ ] SQL database connectors
-  - [ ] EventLog.from_sql() factory method
-  - [ ] Efficient querying for large datasets
+- ✅ **Database Support**
+  - ✅ DuckDB integration for large datasets
+  - ✅ Query-to-EventLog conversion
+  - ✅ Efficient filtering and aggregation
 
 - [ ] **Performance Optimization**
   - [ ] Vectorized operations for metrics
   - [ ] Caching for repeated calculations
-  - [ ] Optional Dask integration for large datasets
+  - [x] DuckDB integration for large datasets
 
 ## Medium-term Goals (0.3.0)
 
@@ -72,6 +72,23 @@ This document outlines the planned features and improvements for future releases
   - [ ] XES format import/export
   - [ ] Integration with process mining standards
   - [ ] APIs for third-party extensions
+
+## Next Major Focus Areas
+
+1. **Machine Learning Module**
+   - Implement predictive analytics for process outcomes
+   - Duration prediction models
+   - Process variant classification
+
+2. **Anomaly Detection**
+   - Identify unusual process behaviors
+   - Outlier case detection
+   - Visualize anomalies in the process
+
+3. **Comprehensive Documentation**
+   - API documentation with examples
+   - User guide for all modules
+   - Tutorials for common use cases
 
 ## Contributing
 

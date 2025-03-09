@@ -16,7 +16,9 @@ dependencies = [
     "numpy>=1.22.0",
     "pandas>=1.4.0",
     "matplotlib>=3.5.0",
-    "pm4py>=2.2.0",
+    "scipy>=1.8.0",
+    "plotly>=5.10.0",
+    "duckdb>=0.7.0",
 ]
 
 [project.optional-dependencies]
@@ -26,6 +28,12 @@ dev = [
     "flake8>=6.0.0",
     "mypy>=1.0.0",
     "black>=23.0.0",
+]
+pm4py = [
+    "pm4py>=2.2.0",
+]
+ml = [
+    "scikit-learn>=1.0.0",
 ]
 
 [tool.black]
